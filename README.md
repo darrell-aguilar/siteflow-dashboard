@@ -64,10 +64,13 @@ and access from [localhost:5000](http://localhost:5000) to which links to the Ex
 
 A custom docker image has also been created for this application. To create the docker image run 
 
-`docker build -t *docker_image_name*`
+```
+docker build -t *docker_image_name* .
+```
 
 Once this has been created, run a docker container using
-
-`docker run -d -p 5000:5000 *docker_image_name* *docker_container_name*`
+```
+docker run -d -p 5000:5000 --name *docker_container_name* *docker_image_name*
+```
 
 This can now be accessed from [localhost:5000](http://localhost:5000)
