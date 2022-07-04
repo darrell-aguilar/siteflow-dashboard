@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# HP Siteflow Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created using Create-React-App
 
-## Available Scripts
+## Purpose of Project
+
+The purpose of this project is to be able to dynamically view, search and filter data from HP Siteflow such as printers and users by communicating with its REST API
+The API for HP Siteflow is this endpoint: [HP Siteflow](https://pro-api.oneflowcloud.com/api)
+
+## Configuration requirements
+
+A .env file has to be created with the following information added:
+
+1. Secret
+2. Token
+3. Site Names
+
+The secret and token should use the following naming convention:
+
+```
+SF_SiteName_SECRET
+SF_SiteName_TOKEN
+```
+
+If multiple sites will be needed, create multipl Secret and Token variables with the relevant site name added onto it
+
+Site Names should be concattenated in a string separated by spaces and saved with the Variable
+
+`REACT_APP_SITES`
+
+Example .env config if site names are 'Site1' and 'Site2'
+```
+SF_Site1_SECRET='add secret here'
+SF_Site2_TOKEN='add token here'
+SF_Site1_SECRET='add secret here'
+SF_Site2_TOKEN='add token here'
+REACT_APP_SITES='Site1 Site2'
+```
+
+## Run in dev
 
 In the project directory, you can run:
 
-### `npm start`
+`npm run start` & `npm run react` to run separate instances of React and Express
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+using [Concurrently](https://www.npmjs.com/package/concurrently), you can run
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+`npm run dev`
 
-### `npm test`
+and access it from [localhost:3000](http://localhost:3000)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Build and run
 
-### `npm run build`
+To build and run the app, run the following commands in order:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm run build
+npm run start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+and access from [localhost:5000](http://localhost:5000) to which links to the Express backend server
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Run in docker
 
-### `npm run eject`
+A custom docker image has also been created for this application. To create the docker image run 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`docker build -t *docker_image_name*`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Once this has been created, run a docker container using
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`docker run -d -p 5000:5000 *docker_image_name* *docker_container_name*`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This can now be accessed from [localhost:5000](http://localhost:5000)
