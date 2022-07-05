@@ -50,14 +50,14 @@ const root = require('path').join(__dirname, 'build')
 app.use(express.static(root))
 
 const getData = async (options, path) => {
-    const response = await axios.get(baseURL + path, options)
+
+    const response = await axios.get(baseURL + path + '?direction=1&sort=name&page=1&pagesize=1000', options)
                         .then(res => res.data)
                         .catch((err) => console.log(err)) 
     return response
 }
 
 app.get('/', (req, res) => {
-    console.log(process.env.NODE_ENV)
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
