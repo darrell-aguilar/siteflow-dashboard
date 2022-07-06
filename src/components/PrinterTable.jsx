@@ -18,6 +18,40 @@ export default function PrinterTable({tableHead, site}) {
        fetchPrinters()
     }, [site])
 
+    const sendPrint = async (printer) => {
+        let payload = {
+            action: {
+                type: "print"
+            },
+            content: {
+                mimeType: printer.zpl === true ? "application/zpl" : "application/pdf",
+                url: printer.zpl === true ? "https://s3-eu-west-1.amazonaws.com/oneflow-public/device-test/label/zpl/label.zpl" : "https://s3-eu-west-1.amazonaws.com/oneflow-public/device-test/greensheet/greensheet.pdf"
+            },
+            device: {
+                type: printer.ipAddress ? "tcp" : "printer",
+                endpoint: printer.ipAddress ? `tcp://${printer.ipAddress}:${printer.port}` : printer.deviceName
+            },
+            source: {
+                name: "connect",
+                category: "printer",
+                deviceId: printer._id,
+                deviceName: printer.name
+            }
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify(payload)
+        }
+        const sendToPrinter = await fetch(`/api/print-job/device?site=${site}`, options)
+                                        .then(res => res.json())
+                                            .catch(err => console.log(err))
+    }
+
     const toggleFilter = () => {
         setShowFilter(!showFilter)
         if (!showFilter) {
@@ -61,6 +95,7 @@ export default function PrinterTable({tableHead, site}) {
                             <th>{printer.port}</th>
                             <th>{printer.zpl.toString()}</th>
                             <th>{printer.active.toString()}</th>
+                            <th><button className='btn btn-primary' onClick={() => sendPrint(printer)}>Send to press</button></th>
                         </tr>
                         )}
                 </tbody>

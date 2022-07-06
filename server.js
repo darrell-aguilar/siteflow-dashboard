@@ -47,6 +47,7 @@ const createHeader = (req, res, next) => {
 }
 
 const root = require('path').join(__dirname, 'build')
+app.use(express.json())
 app.use(express.static(root))
 
 const getData = async (options, path) => {
@@ -73,6 +74,14 @@ app.get(('/api/printer'), async (req, res) => {
 app.get(('/api/user'), async (req, res) => {
     const userArray = await getData(res.locals.options, req.path)
     res.json(userArray)
+})
+
+app.post(('/api/print-job/device'), async (req, res) => {
+    req.body = {...req.body, agentId: process.env.AGENTID}
+    const sendPrint = await axios.post(baseURL + req.path, req.body, res.locals.options)
+                                    .then(res => res.data)
+                                        .catch(err => console.log(err))
+    res.json(sendPrint)
 })
 
 app.get(('*'), (req, res) => {

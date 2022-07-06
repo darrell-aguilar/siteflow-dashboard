@@ -33,7 +33,7 @@ function App() {
         <button className={`btn ${currentTab === 'Users' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={handleClick}>Users</button>
       </div>
       {currentTab === 'Printers' ?
-      <PrinterTable site={site} tableHead={["Name", "Device Name", "IP Address", "Type", "Orientation", "Port", "ZPL", "Active"]}/>
+      <PrinterTable site={site} tableHead={["Name", "Device Name", "IP Address", "Type", "Orientation", "Port", "ZPL", "Active", "Send To Press"]}/>
       :
       <UserTable site={site} tableHead={["Name", "Username", "Email", "ProdUser", "Active"]} />
       }
