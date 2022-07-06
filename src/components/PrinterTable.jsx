@@ -7,6 +7,8 @@ export default function PrinterTable({tableHead, site}) {
     const [activeOnly, setActiveOnly] = useState(false)
     const [showFilter, setShowFilter] = useState(false)
     const [search, setSearch] = useState('')
+    const [printerTypes, setPrinterTypes] = useState([])
+    const [printerTypeFilter, setPrinterTypeFilter] = useState('All')
 
     useEffect(() => {
         const fetchPrinters= async () => {
@@ -17,6 +19,18 @@ export default function PrinterTable({tableHead, site}) {
         }
        fetchPrinters()
     }, [site])
+
+    useEffect(() => {
+        if(printers !== '') {
+            var myPrinters = []
+            for(var printer of printers) {
+                if (!myPrinters.includes(printer.type)) {
+                    myPrinters.push(printer.type)
+                }
+            }
+            setPrinterTypes(myPrinters)
+        }
+    }, [printers])
 
     const sendPrint = async (printer) => {
         let payload = {
@@ -74,6 +88,15 @@ export default function PrinterTable({tableHead, site}) {
                         <label className='m-2'>Active Only</label>
                         <input type="checkbox" onChange={() => setActiveOnly(!activeOnly)}></input>
                     </div>
+                    <div className='mx-3'>
+                        <label className='m-2'>Filter by printer type</label>
+                        <select defaultValue="All" className='py-1 px-1' onChange={(e) => setPrinterTypeFilter(e.target.value)}>
+                            <option>All</option>
+                            {(printerTypes.length !== 0) && printerTypes.map(type => 
+                            <option key={type}>{type}</option>
+                            )}
+                        </select>
+                    </div>
                 </div>
             <table className="table">
                 <thead className='table-dark'> 
@@ -85,7 +108,11 @@ export default function PrinterTable({tableHead, site}) {
                 </thead>
                 <tbody>
                     {printers !=='' && 
-                    printers.filter(printer => printer.name.toLowerCase().includes(search) || printer.ipAddress?.includes(search) || search === '').filter(printer => zplOnly === true ? printer.zpl.toString().includes('true') : true).filter(printer => activeOnly === true ? printer.active.toString().includes('true') : true).map((printer, index) => 
+                    printers.filter(printer => printer.name.toLowerCase().includes(search) || printer.ipAddress?.includes(search) || search === '')
+                            .filter(printer => zplOnly === true ? printer.zpl.toString().includes('true') : true)
+                            .filter(printer => activeOnly === true ? printer.active.toString().includes('true') : true)
+                            .filter(printer => printerTypeFilter === 'All' ? true : printer.type.includes(printerTypeFilter))
+                            .map((printer, index) => 
                         <tr key={index}>
                             <th>{printer.name}</th>
                             <th>{printer.deviceName}</th>
