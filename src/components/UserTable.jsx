@@ -36,6 +36,7 @@ export default function UserTable({tableHead, site}) {
                         <input type="checkbox" onChange={() => setActiveOnly(!activeOnly)}></input>
                     </div>
                 </div>
+            <div className='table-responsive'>
             <table className="table">
                 <thead className='table-dark'> 
                     <tr>
@@ -57,6 +58,7 @@ export default function UserTable({tableHead, site}) {
                         )}
                 </tbody>
             </table>
+            </div>
         </div>
     )
 }

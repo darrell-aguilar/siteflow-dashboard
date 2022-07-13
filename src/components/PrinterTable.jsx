@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-export default function PrinterTable({tableHead, site}) {
+export default function PrinterTable({setMessages, tableHead, site}) {
 
     const [printers, setPrinters] = useState('')
     const [zplOnly, setZplOnly] = useState(false)
@@ -61,9 +61,27 @@ export default function PrinterTable({tableHead, site}) {
               },
             body: JSON.stringify(payload)
         }
-        const sendToPrinter = await fetch(`/api/print-job/device?site=${site}`, options)
-                                        .then(res => res.json())
-                                            .catch(err => console.log(err))
+        const sendToPrinter = async () => {
+            try {
+                await fetch(`/api/print-job/device?site=${site}`, options)
+                .then(res => res.json())
+                    .catch(err => console.log(err))
+                setMessages(messages => [{
+                    state: "success",
+                    msg: "Job has been sent to the printer",
+                    id: messages.length
+                }, ...messages])
+            }
+            catch(e) {
+                setMessages(messages => [{
+                    state: "error",
+                    msg: "An error has occured",
+                    id: messages.length
+                }, ...messages])
+            }
+        }
+           
+       sendToPrinter()
     }
 
     const toggleFilter = () => {
@@ -98,6 +116,7 @@ export default function PrinterTable({tableHead, site}) {
                         </select>
                     </div>
                 </div>
+            <div className='table-responsive'>
             <table className="table">
                 <thead className='table-dark'> 
                     <tr>
@@ -127,6 +146,7 @@ export default function PrinterTable({tableHead, site}) {
                         )}
                 </tbody>
             </table>
+            </div>
         </div>
     )
 }

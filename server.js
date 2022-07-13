@@ -51,7 +51,6 @@ app.use(express.json())
 app.use(express.static(root))
 
 const getData = async (options, path) => {
-
     const response = await axios.get(baseURL + path + '?direction=1&sort=name&page=1&pagesize=1000', options)
                         .then(res => res.data)
                         .catch((err) => console.log(err)) 
@@ -67,13 +66,23 @@ app.use(('/'), createHeader, (req, res, next) => {
 })
 
 app.get(('/api/printer'), async (req, res) => {
-    const printerArray = await getData(res.locals.options, req.path)
-    res.json(printerArray)
+    try {
+        const printerArray = await getData(res.locals.options, req.path)
+        res.status(200).json(printerArray)
+    }
+    catch(e) {
+        res.status(500)
+    }
 })
 
 app.get(('/api/user'), async (req, res) => {
-    const userArray = await getData(res.locals.options, req.path)
-    res.json(userArray)
+    try {
+        const userArray = await getData(res.locals.options, req.path)
+        res.json(userArray)
+    }
+    catch(e) {
+        res.status(500)
+    }
 })
 
 app.post(('/api/print-job/device'), async (req, res) => {
@@ -81,7 +90,7 @@ app.post(('/api/print-job/device'), async (req, res) => {
     const sendPrint = await axios.post(baseURL + req.path, req.body, res.locals.options)
                                     .then(res => res.data)
                                         .catch(err => console.log(err))
-    res.json(sendPrint)
+    res.status(200).json(sendPrint)
 })
 
 app.get(('*'), (req, res) => {
