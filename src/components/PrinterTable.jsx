@@ -137,9 +137,6 @@ export default function PrinterTable({setMessages, tableHead, site}) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th><button className='btn btn-primary' onClick={() => sendPrint("ok")}>Send to press</button></th>
-                    </tr>
                     {printers !=='' && 
                     printers.filter(printer => printer.name.toLowerCase().includes(search) || printer.ipAddress?.includes(search) || search === '')
                             .filter(printer => zplOnly === true ? printer.zpl.toString().includes('true') : true)
