@@ -4,7 +4,6 @@ export default function UserTable({tableHead, site}) {
 
     const [users, setUsers] = useState('')
     const [activeOnly, setActiveOnly] = useState(false)
-    const [showFilter, setShowFilter] = useState(false)
     const [search, setSearch] = useState('')
 
     useEffect(() => {
@@ -18,11 +17,7 @@ export default function UserTable({tableHead, site}) {
     }, [site])
 
     const toggleFilter = () => {
-        setShowFilter(!showFilter)
-        if (!showFilter) {
-            document.querySelector('#filterToggle').classList.remove('d-none')
-        }
-        else document.querySelector('#filterToggle').classList.add('d-none')
+            document.querySelector('#filterToggle').classList.toggle('d-none')
     }
 
     return (

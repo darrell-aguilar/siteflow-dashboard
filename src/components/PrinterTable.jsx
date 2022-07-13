@@ -5,7 +5,6 @@ export default function PrinterTable({setMessages, tableHead, site}) {
     const [printers, setPrinters] = useState('')
     const [zplOnly, setZplOnly] = useState(false)
     const [activeOnly, setActiveOnly] = useState(false)
-    const [showFilter, setShowFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [printerTypes, setPrinterTypes] = useState([])
     const [printerTypeFilter, setPrinterTypeFilter] = useState('All')
@@ -64,13 +63,29 @@ export default function PrinterTable({setMessages, tableHead, site}) {
         const sendToPrinter = async () => {
             try {
                 await fetch(`/api/print-job/device?site=${site}`, options)
-                .then(res => res.json())
-                    .catch(err => console.log(err))
-                setMessages(messages => [{
-                    state: "success",
-                    msg: "Job has been sent to the printer",
-                    id: messages.length
-                }, ...messages])
+                .then(res => {
+                    if (res.status !== 200) {
+                        setMessages(messages => [{
+                            state: "error",
+                            msg: "An error has occured",
+                            id: messages.length
+                        }, ...messages])
+                    }
+                    else {
+                        setMessages(messages => [{
+                            state: "success",
+                            msg: "Job has been sent to the printer",
+                            id: messages.length
+                        }, ...messages])
+                    }
+                    
+                })
+                .catch(err => setMessages(messages => [{
+                        state: "error",
+                        msg: "An error has occured",
+                        id: messages.length
+                    }, ...messages]))
+                
             }
             catch(e) {
                 setMessages(messages => [{
@@ -85,11 +100,7 @@ export default function PrinterTable({setMessages, tableHead, site}) {
     }
 
     const toggleFilter = () => {
-        setShowFilter(!showFilter)
-        if (!showFilter) {
-            document.querySelector('#filterToggle').classList.remove('d-none')
-        }
-        else document.querySelector('#filterToggle').classList.add('d-none')
+        document.querySelector('#filterToggle').classList.toggle('d-none')
     }
 
     return (
@@ -126,6 +137,9 @@ export default function PrinterTable({setMessages, tableHead, site}) {
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <th><button className='btn btn-primary' onClick={() => sendPrint("ok")}>Send to press</button></th>
+                    </tr>
                     {printers !=='' && 
                     printers.filter(printer => printer.name.toLowerCase().includes(search) || printer.ipAddress?.includes(search) || search === '')
                             .filter(printer => zplOnly === true ? printer.zpl.toString().includes('true') : true)

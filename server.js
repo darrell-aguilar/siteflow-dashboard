@@ -71,7 +71,7 @@ app.get(('/api/printer'), async (req, res) => {
         res.status(200).json(printerArray)
     }
     catch(e) {
-        res.status(500)
+        res.status(500).status("Error occured")
     }
 })
 
@@ -81,16 +81,21 @@ app.get(('/api/user'), async (req, res) => {
         res.json(userArray)
     }
     catch(e) {
-        res.status(500)
+        res.status(500).send("Error occured")
     }
 })
 
 app.post(('/api/print-job/device'), async (req, res) => {
     req.body = {...req.body, agentId: process.env.AGENTID}
-    const sendPrint = await axios.post(baseURL + req.path, req.body, res.locals.options)
-                                    .then(res => res.data)
-                                        .catch(err => console.log(err))
-    res.status(200).json(sendPrint)
+    try {
+        const sendPrint = await axios.post(baseURL + req.path, req.body, res.locals.options)
+                                    .then(response => res.status(200).json(response.data))
+                                        .catch(err => res.status(400).send("Error occured"))
+    }
+    catch(e) {
+        res.status(500).send("Error occured")
+    } 
+   
 })
 
 app.get(('*'), (req, res) => {
