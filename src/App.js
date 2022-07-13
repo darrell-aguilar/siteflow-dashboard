@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App w-100">
-      <div className='py-4 d-flex container justify-content-between position-relative w-100'>
+      <div className='py-4 d-flex flex-md-row flex-column container justify-content-between position-relative w-100'>
         <PopUp messages={messages} setMessages={setMessages}/>
         <h1>Siteflow Dashboard</h1>
         <div>

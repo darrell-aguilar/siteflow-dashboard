@@ -27,7 +27,7 @@ export default function UserTable({tableHead, site}) {
 
     return (
         <div className='container'>
-            <input className='px-3 py-2 mb-3 w-50' onChange={(e) => setSearch(e.target.value.toLowerCase())} placeholder="Search to filter by user"/>
+            <input className='px-3 py-2 mb-3 w-75' onChange={(e) => setSearch(e.target.value.toLowerCase())} placeholder="Search to filter by user"/>
             <br/>
             <button className='btn btn-secondary mb-3' onClick={() => toggleFilter()}>Show Filters</button>
                 <div id="filterToggle" className='d-flex align-items-center justify-content-center d-none'>

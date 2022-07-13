@@ -4,7 +4,7 @@ import '../App.css'
 export default function PopUp({messages, setMessages}) {
     const handleDelete = (event) => {
         const id = event.currentTarget.parentNode.getAttribute('count')
-        setMessages(messages.filter(msg => msg.id !== id))
+        setMessages(oldArray => oldArray.filter(msg => msg.id != id))
     }
 
     useEffect(() => {
