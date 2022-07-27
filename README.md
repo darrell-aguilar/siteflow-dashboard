@@ -14,12 +14,15 @@ A .env file has to be created with the following information added:
 1. Secret
 2. Token
 3. Site Names
+4. Agent ID
 
-The secret and token should use the following naming convention:
+The SECRET, TOKEN, and AGENTID should use the following naming convention:
 
 ```
 SF_SiteName_SECRET
 SF_SiteName_TOKEN
+SiteNameAGENTID
+SiteNameAGENTID
 ```
 
 If multiple sites will be needed, create multipl Secret and Token variables with the relevant site name added onto it
@@ -34,6 +37,8 @@ SF_Site1_SECRET='add secret here'
 SF_Site2_TOKEN='add token here'
 SF_Site1_SECRET='add secret here'
 SF_Site2_TOKEN='add token here'
+Site1AGENTID='add agent id here'
+Site2AGENTID='add agent id here'
 REACT_APP_SITES='Site1 Site2'
 ```
 
