@@ -43,6 +43,7 @@ const createHeader = (req, res, next) => {
     res.locals.options = {
         headers: headers
     };
+    res.locals.site = req.query.site
     next()
 }
 
@@ -86,7 +87,8 @@ app.get(('/api/user'), async (req, res) => {
 })
 
 app.post(('/api/print-job/device'), async (req, res) => {
-    req.body = {...req.body, agentId: process.env.AGENTID}
+    var siteAgentID = `${res.locals.site}AGENTID`
+    req.body = {...req.body, agentId: process.env[siteAgentID]}
     try {
         const sendPrint = await axios.post(baseURL + req.path, req.body, res.locals.options)
                                     .then(response => res.status(200).json(response.data))
